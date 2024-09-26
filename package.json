@@ -7,7 +7,8 @@
     "db:studio": "bun prisma studio",
     "db:generate": "bun prisma generate",
     "db:migrate": "bun prisma migrate dev",
-    "start": "bun run src/server.ts"
+    "start": "bun run src/server.ts",
+    "build": "bun build ./src/server.ts --outdir ./build"
   },
   "dependencies": {
     "@prisma/client": "5.20.0",
