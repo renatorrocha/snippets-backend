@@ -4,11 +4,15 @@ FROM node:20-alpine AS build
 # Defina o diretório de trabalho
 WORKDIR /app
 
-# Instale o Bun
-RUN apk add curl \
-    && curl -fsSL https://bun.sh/install | bash \
-    && export BUN_INSTALL="/root/.bun" \
-    && export PATH="$BUN_INSTALL/bin:$PATH"
+# Instale o curl e o bash
+RUN apk add --no-cache curl bash
+
+# Instale o Bun usando 'sh' em vez de 'bash'
+RUN curl -fsSL https://bun.sh/install | sh
+
+# Defina as variáveis de ambiente para o Bun
+ENV BUN_INSTALL="/root/.bun"
+ENV PATH="$BUN_INSTALL/bin:$PATH"
 
 # Copie os arquivos package*.json
 COPY package*.json ./
@@ -17,13 +21,13 @@ COPY package*.json ./
 COPY . .
 
 # Instale as dependências usando o Bun
-RUN /root/.bun/bin/bun i
+RUN $BUN_INSTALL/bin/bun i
 
 # Gere o Prisma Client
-RUN /root/.bun/bin/bunx prisma generate
+RUN $BUN_INSTALL/bin/bunx prisma generate
 
 # Construa o projeto
-RUN /root/.bun/bin/bun run build
+RUN $BUN_INSTALL/bin/bun run build
 
 # Comando para iniciar a aplicação
-CMD ["/root/.bun/bin/bun", "run", "start:prod"]
+CMD ["$BUN_INSTALL/bin/bun", "run", "start:prod"]
