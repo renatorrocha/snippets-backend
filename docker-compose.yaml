@@ -1,0 +1,19 @@
+name: snippets_backend
+
+services:
+
+  app:
+    container_name: ${COMPOSE_PROJECT_NAME}-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+      
+      target: ${BUILD_TARGET:-dev}
+    restart: unless-stopped
+    environment:
+      - PORT=${APP_PORT}
+      - DATABASE_URL=${DATABASE_URL}
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

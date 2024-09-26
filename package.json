@@ -8,6 +8,7 @@
     "db:generate": "bun prisma generate",
     "db:migrate": "bun prisma migrate dev",
     "start": "bun run src/server.ts",
+    "start:prod": "bun prisma migrate deploy && bun dev",
     "build": "bun build ./src/server.ts --outdir ./build"
   },
   "dependencies": {
