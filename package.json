@@ -8,7 +8,7 @@
     "db:generate": "bun prisma generate",
     "db:migrate": "bun prisma migrate dev",
     
-    "build": "bun prisma generate",
+    "build": "bun run prisma generate",
     "start": "bunx prisma migrate deploy"
   },
   "dependencies": {
