@@ -1,32 +1,31 @@
-import type { Snippet } from "@prisma/client";
 import { db } from "../db";
 import type { ISnippet } from "../schemas/snippet-schema";
 
 export const snippetService = {
-	async createSnippet(data: ISnippet) {
+	async create(data: ISnippet) {
 		return db.snippet.create({
 			data,
 		});
 	},
 
-	async getSnippets() {
+	async getAll() {
 		return db.snippet.findMany();
 	},
 
-	async getSnippetById(id: string) {
+	async getById(id: string) {
 		return db.snippet.findUnique({
 			where: { id },
 		});
 	},
 
-	async updateSnippet(id: string, data: Snippet) {
+	async update(id: string, data: ISnippet) {
 		return db.snippet.update({
 			where: { id },
 			data,
 		});
 	},
 
-	async deleteSnippet(id: string) {
+	async delete(id: string) {
 		return db.snippet.delete({ where: { id } });
 	},
 };
