@@ -1,33 +1,33 @@
-# Use a imagem base do Node.js
-FROM node:20-alpine AS build
+# Usa uma imagem Node.js como base
+FROM node:18
 
-# Defina o diretório de trabalho
+# Instala o Bun
+RUN curl -fsSL https://bun.sh/install | bash
+
+# Define o diretório de instalação do Bun e adiciona ao PATH
+ENV BUN_INSTALL="/root/.bun"
+ENV PATH="${BUN_INSTALL}/bin:${PATH}"
+
+# Define o diretório de trabalho
 WORKDIR /app
 
-# Instale o curl e o bash
-RUN apk add --no-cache curl bash
-
-# Instale o Bun usando 'sh' em vez de 'bash'
-RUN curl -fsSL https://bun.sh/install | sh
-
-# Defina as variáveis de ambiente para o Bun
-ENV BUN_INSTALL="/root/.bun"
-ENV PATH="$BUN_INSTALL/bin:$PATH"
-
-# Copie os arquivos package*.json
+# Copia os arquivos de dependências do projeto
 COPY package*.json ./
 
-# Copie o restante do código
+# Instala as dependências usando Bun
+RUN bun install
+
+# Copia o restante do código para o contêiner
 COPY . .
 
-# Instale as dependências usando o Bun
-RUN $BUN_INSTALL/bin/bun i
+# Expõe a porta que a aplicação vai usar
+EXPOSE 3000
 
-# Gere o Prisma Client
-RUN $BUN_INSTALL/bin/bunx prisma generate
+# Gera o cliente Prisma
+RUN bun prisma generate
 
-# Construa o projeto
-RUN $BUN_INSTALL/bin/bun run build
+# Executa a migração do Prisma para o banco de dados
+RUN bun prisma migrate deploy
 
 # Comando para iniciar a aplicação
-CMD ["$BUN_INSTALL/bin/bun", "run", "start:prod"]
+CMD ["bun", "run", "start:prod"]
