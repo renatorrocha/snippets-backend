@@ -8,11 +8,14 @@ RUN bun install
 
 COPY . .
 
+# Gerar o Prisma Client no build
+RUN bun prisma generate
+
 # Compilar a aplicação
 RUN bun build ./src/server.ts --outdir ./build
 
 # Expor a porta
 EXPOSE 3000
 
-# No runtime, rodar migrations e gerar o Prisma Client
-CMD ["sh", "-c", "bun prisma migrate deploy && bun prisma generate && bun ./build/server.js"]
+# No runtime, rodar as migrações e iniciar o servidor
+CMD ["sh", "-c", "bun prisma migrate deploy && bun ./build/server.js"]
