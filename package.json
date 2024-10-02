@@ -7,8 +7,8 @@
         "db:studio": "bun prisma studio",
         "db:generate": "bun prisma generate",
         "db:migrate": "bun prisma migrate dev",
-        "start:prod": "bun prisma migrate deploy && bun start",
-        "build": "bun build --compile --minify-whitespace --minify-syntax --target bun --outfile server ./src/server.ts"
+        "start:prod": "bun prisma migrate deploy && bun ./build/server.js",
+        "build": "bun build ./src/server.ts --target bun --outdir ./build "
     },
     "dependencies": {
         "@elysiajs/swagger": "^1.1.3",
