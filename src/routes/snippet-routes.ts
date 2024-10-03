@@ -8,15 +8,39 @@ export const snippetRoutes = new Elysia({
     },
 }).group("/snippets", (app) =>
     app
-        .get("/", () => snippetService.getAll())
-        .get("/:id", ({ params }) => snippetService.getById(params.id))
+        .get("/", () => snippetService.getAll(), {
+            detail: {
+                summary: "Get all Snippets",
+            },
+        })
+        .get("/:id", ({ params }) => snippetService.getById(params.id), {
+            detail: {
+                summary: "Get Snippet by id",
+            },
+        })
         .post("/", async ({ body }) => snippetService.create(body), {
             body: snippetSchema,
+            detail: {
+                summary: "Create new Snippet",
+            },
         })
         .put(
             "/:id",
             async ({ body, params }) => snippetService.update(params.id, body),
-            { body: snippetSchema }
+            {
+                body: snippetSchema,
+                detail: {
+                    summary: "Update Snippet",
+                },
+            }
         )
-        .delete("/:id", async ({ params }) => snippetService.delete(params.id))
+        .delete(
+            "/:id",
+            async ({ params }) => snippetService.delete(params.id),
+            {
+                detail: {
+                    summary: "Delete Snippet",
+                },
+            }
+        )
 );
