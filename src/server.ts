@@ -1,8 +1,13 @@
 import { Elysia } from "elysia";
 import { snippetRoutes } from "./routes/snippet-routes";
 import { swagger } from "@elysiajs/swagger";
+import jwt from "@elysiajs/jwt";
+import { authRoutes } from "./routes/auth-routes";
 
 const app = new Elysia()
+
+    .use(snippetRoutes)
+    .use(authRoutes)
     .use(
         swagger({
             documentation: {
@@ -19,7 +24,6 @@ const app = new Elysia()
             },
         })
     )
-    .use(snippetRoutes)
     .listen(Bun.env.PORT ?? 3000);
 
 console.log(
